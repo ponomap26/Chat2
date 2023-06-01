@@ -49,41 +49,13 @@ socket.onmessage = function(event) {
         };
     };
 };
-document.querySelector('.create_users').addEventListener('click', () => {
-    let name = document.getElementById("input_user");
-    if (name.value !== "") {
-        socket.send(JSON.stringify({'create_user': name.value}));
-        console.log({'create_user': name.value});
-        name.value = "";
-    };
-});
-
-function printUsers(data) {
-    delete data.UserList;
-    let list = '';
-    for (let key in data) {
-        const newString = `<tr><td>${data[key]}</td>
-        <td><button onclick="userLogged(${key})">выбрать</button></td>
-        <td><button onclick="deleteUser(${key})">удалить</button></td>`;
-        list = list + newString;
-    };
-    divSelectUsers.innerHTML = `<table> ${list}</table><br>`;
-};
 
 
-function deleteUser(id) {
-    socket.send(JSON.stringify({'delete_user': id}));
-    console.log({'delete_user': id});
-};
 
-function userLogged(userId) {
-    // удалим уже ненужный div выбора юзера если он был выбран
-    if (userLoggedId == undefined) {
-        document.querySelector('.div_main').removeChild(document.querySelector('.div_start'));
-    };
-    userLoggedId = userId;
-    viewUserCard(userId);
-};
+
+
+
+
 
 function viewUserCard(userId) {
     fetch(domain + 'users/' + userId +'/')
@@ -93,80 +65,7 @@ function viewUserCard(userId) {
     socket.send(JSON.stringify({'load': 'rooms'}));
 };
 
-function printUserCard(item) {
-    if (item.room == null) {
-        room = "не выбрана";
-    } else {
-        let idRoom = item.room[item.room.length-2];
-        room = listrooms[idRoom];
-    };
-    divUser.innerHTML = `
-    <div class="div">
-        <img src="${item.avatar}">
-        <br>
-        <strong>Сменить аватарку:</strong><br>
-        <input id="avatar-input" type="file" accept="image/*"><br>
-        <button onclick="editAvatar(${item.id})">отправить</button>
-        <p>ID: ${item.id}</p>
-        <p>Имя: ${item.name} <button onclick="changeUserName(${item.id})">изменить</button></p>
-        <p>Комната в чате: ${room}</p>
-        <h4 class="message" id="message"></h4>
-    </div>
-    `;
-};
 
-function printUserCard(item) {
-    if (item.room == null) {
-        room = "не выбрана";
-    } else {
-        let idRoom = item.room[item.room.length-2];
-        room = listrooms[idRoom];
-    };
-
-    divUser.innerHTML = `
-    <div class="div">
-        <img src="${item.avatar}">
-        <br>
-        <strong>Сменить аватарку:</strong><br>
-        <input id="avatar-input" type="file" accept="image/*"><br>
-        <button onclick="editAvatar(${item.id})">отправить</button>
-        <p>ID: ${item.id}</p>
-        <p>Имя: ${item.name} <button onclick="changeUserName(${item.id})">изменить</button></p>
-        <p>Комната в чате: ${room}</p>
-        <h4 class="message" id="message"></h4>
-    </div>
-    `;
-};
-
-async function editAvatar(userId) {
-    const formData = new FormData();
-    let fileField = document.querySelector('#avatar-input');
-    if (fileField.files[0]) {
-        formData.append('avatar', fileField.files[0]);
-        formData.append('avatar_small', fileField.files[0]);
-        try {
-            const response = await fetch(domain + 'users/' + userId +'/', {
-                method: 'PATCH',
-                body: formData
-            });
-            const result = await response.json();
-            console.log('Фото юзера сохранено:', JSON.stringify(result));
-        } catch (error) {
-            console.log('Все пропало!!!');
-            console.error('Ошибка:', error);
-        }
-        viewUserCard(userId);
-    } else {
-        console.log('Файл не выбран!');
-        document.querySelector('#message').innerText = '!!! файл не выбран';
-    };
-};
-
-function changeUserName(userId) {
-    let name = prompt('Введите новое имя');
-    socket.send(JSON.stringify({'order': 'changeUserName', 'id': userId, 'name': name }));
-    console.log('Отправлен запрос на сервер изменить имя на:', name);
-};
 
 
 function printRooms(data) {
