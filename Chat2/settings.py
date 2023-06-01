@@ -46,10 +46,11 @@ INSTALLED_APPS = [
 ]
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1']
-
+SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -57,6 +58,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+ORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
 ROOT_URLCONF = 'Chat2.urls'
 
 TEMPLATES = [
@@ -78,6 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Chat2.wsgi.application'
 
+ASGI_APPLICATION = 'Chat2.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -112,10 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Europe/Samara'
 USE_I18N = True
 
 USE_TZ = True
@@ -130,3 +134,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
