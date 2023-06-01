@@ -21,7 +21,7 @@ class Message(models.Model):
 
 
 class Profile(models.Model):
-    nik = models.CharField(max_length=56, verbose_name='Никнейм', null=True, blank=True)
+    nic = models.CharField(max_length=56, verbose_name='Никнейм', null=True, blank=True)
     avatar = models.ImageField(upload_to='chatImage', null=True, blank=True, verbose_name='Аватарка')
     online = models.BooleanField(default=False)
 
