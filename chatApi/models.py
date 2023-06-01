@@ -25,6 +25,3 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='chatImage', null=True, blank=True, verbose_name='Аватарка')
     online = models.BooleanField(default=False)
 
-    def user_list(self):
-        users = Profile.objects.filter().order_by('name')
-        return list(users)

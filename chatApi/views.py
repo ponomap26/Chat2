@@ -1,6 +1,9 @@
 from channels.auth import login
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.shortcuts import render, redirect
 
 
@@ -49,12 +52,15 @@ class ApiProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
 
 
-
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
 @login_required
 def edit(request):
     try:
-        profile = request.user.profile
+        profile = request.user.Profile.objects
     except Profile.DoesNotExist:
         profile = Profile(user=request.user)
 
