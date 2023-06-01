@@ -107,7 +107,7 @@ function editRoom(id) {
     console.log('Отправлен запрос на сервер изменить имя комнаты на:', name);
 };
 
-// Рисуем модуль чата
+
 function printChat(data) {
     divChat.innerHTML = `<h3 style="text-align: center;">Комната: ${data['MessageList']}</h3>
     <textarea class="textarea" name="textarea"></textarea><br>
